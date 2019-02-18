@@ -1,3 +1,12 @@
+### Setup
+1. Install Dependencies though package.json
+
+        npm install package.json
+    
+2. Run the server
+
+         ng serve
+
 # WineExpert
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
