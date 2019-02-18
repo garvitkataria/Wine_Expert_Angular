@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>Wine Expert</title>
+  </head>
+  <body>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+<!-- <nav class="navbar navbar-light bg-light">
+	  <span class="navbar-text">
+		    <h5>Wine Expert</h5>
+	  </span>
+		<ul class="nav justify-content-end">
+		  <li class="nav-item">
+		    <a class="nav-link" href="#">portfolio</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+		  </li>
+		</ul>
+</nav> -->
+
+<br>
+<div>
+	<label for="basic-url"><h4>Search Based On Different Countries, Provinces & Regions</h4></label>
+	<div class="input-group mb-3">
+			<div class="input-group-prepend">
+			<span class="input-group-text" id="basic-addon3">Enter a country, province or a region.</span>
+			</div>
+			<input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3"#val1>
+			<input class="btn btn-primary" type="submit" value="Submit" (click)="Search(val1.value)">
+	</div>
+	<div class="input-group mb-3 justify-content-center">
+		<h5 *ngIf="this.search_flag"style="color:green;">{{this.search_txt}}</h5>
+		<h5 *ngIf="!this.search_flag"style="color:blue;">{{this.search_txt}}</h5>
+		<h5 *ngIf="this.search_error!=''"style="color:red;">{{this.search_error}}</h5>
+	</div>
+</div>
+<div>
+	<label for="basic-url"><h4>Search Based On Different Type Of Grapes Used.</h4></label>
+	<div class="input-group mb-3">
+			<div class="input-group-prepend">
+			<span class="input-group-text" id="basic-addon3">Enter a variety.</span>
+			</div>
+			<input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" #val >
+			<input class="btn btn-primary" type="submit" value="Submit" (click)="VarietySearch(val.value)">
+	</div>
+	<div class="input-group mb-3 justify-content-center">
+		<h5 *ngIf="this.variety_search_flag"style="color:green;">{{this.variety_search_txt}}</h5>
+		<h5 *ngIf="!this.variety_search_flag"style="color:blue;">{{this.variety_search_txt}}</h5>
+		<h5 *ngIf="this.variety_search_error!=''"style="color:red;">{{this.variety_search_error}}</h5>
+	</div>
+</div>
+<div>
+	<label for="basic-url"><h4>Sorting The Wines Based On Price (On This Page).</h4></label>
+	<div class="input-group mb-3 justify-content-center">
+		<button type="button" class="btn btn-outline-primary" (click)="PriceHighToLow()" >High To Low</button>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button type="button" class="btn btn-outline-primary" (click)="PriceLowToHigh()">Low To High</button>
+	</div>
+</div>
+
+
+<div class="table-responsive" style="margin-top: 0%">
+	<nav aria-label="Page navigation example">
+		  <ul class="pagination justify-content-end">
+		  	<li class="page-item disabled" *ngIf="loading_flag"><a class="page-link" href="#"><b>Loading...</b></a></li>
+		  	<li class="page-item disabled">
+		      	<a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+		  		Total: {{this.size}}
+		  		</a>
+		    </li>
+
+		  	<li class="page-item"><a class="page-link" href="#">{{this.index.starting+1}} - {{this.index.ending}}</a></li>
+
+		    <li class="page-item " (click)="PreviousPage()" *ngIf="this.current_page > 1">
+		      <a class="page-link" href="#" >Previous</a>
+		    </li>
+		    <li class="page-item disabled" *ngIf="this.current_page <= 1">
+		      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+		    </li>
+
+		    <li class="page-item active" aria-current="page">
+		      <span class="page-link">
+		        {{this.current_page}}
+		        <span class="sr-only">(current)</span>
+		      </span>
+		    </li>
+		    
+		    <li class="page-item">
+		      <a class="page-link" href="#" (click)="NextPage()" *ngIf="this.current_page <= this.total_pages">Next</a>
+		    </li>
+		    <li class="page-item disabled">
+		      <a class="page-link" href="#" *ngIf="this.current_page > this.total_pages" tabindex="-1" aria-disabled="true">Next</a>
+		    </li>
+
+		  </ul>
+	</nav>
+	<table class="table table-hover">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Winery</th>
+				<th scope="col">Country</th>
+				<th scope="col">Province</th>
+				<th scope="col">Region</th>
+				<th scope="col">Designation</th>
+				<th scope="col">Variety</th>
+				<th scope="col">Points</th>
+				<th scope="col">Price</th>
+			</tr>
+		</thead>
+		<tbody>
+				<tr *ngFor="let wine of wines;let i = index" (click)="alertFunction(wine.description)">
+				<td>{{i+1}}</td>
+				<td>{{wine.winery}}</td>
+				<td>{{wine.country}}</td>
+				<td>{{wine.province}}</td>
+				<td>{{wine.region_1}},{{wine.region_2}}</td>
+				<td>{{wine.designation}}</td>
+				<td>{{wine.variety}}</td>
+				<th scope="row">{{wine.points}}</th>
+				<th scope="row" *ngIf="wine.price!=-1">{{wine.price}}</th>
+				<th scope="row" *ngIf="wine.price==-1"> - </th>
+				</tr>
+		</tbody>
+	</table>
+</div>
+
+
+
+
+
+	</body>
+</html>
